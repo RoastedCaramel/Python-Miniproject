@@ -1,5 +1,5 @@
 import pymysql
-import Constants
+from app import Constants
 
 
 def customerTable():
@@ -34,16 +34,19 @@ def computerTable():
     con = pymysql.connect(host=Constants.HOST, user=Constants.USER, db=Constants.DATABASE)
     cur = con.cursor()
     cur.execute(
-        "CREATE TABLE computer (computer_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,inUse INT NOT NULL, start_time TIME,user VARCHAR(255) FOREIGN KEY REFERENCES customer(user_id))")
+        "CREATE TABLE computer (computer_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,inUse INT NOT NULL,"
+        "start_time TIME, user_id VARCHAR(255), FOREIGN KEY (user_id) REFERENCES customer (user_id))")
     con.commit()
+
 
 def earningsTable():
     con = pymysql.connect(host=Constants.HOST, user=Constants.USER, db=Constants.DATABASE)
     cur = con.cursor()
     cur.execute(
-        "CREATE TABLE session_earnings (computer_id INT PRIMARY KEY NOT NULL,user VARCHAR(255) FOREIGN KEY REFERENCES customer(user_id)),start_time TIME,end_time TIME")
+        "CREATE TABLE session_earnings (computer_id INT PRIMARY KEY NOT NULL,user VARCHAR(255), user_id VARCHAR(255) FOREIGN KEY REFERENCES customer(user_id)),start_time TIME,end_time TIME")
     con.commit()
 
 # customerTable()
 # adminTable()
 # insertingAdmins()
+# computerTable()

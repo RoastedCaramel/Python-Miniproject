@@ -102,3 +102,4 @@ def Main_Admin_Page(currentlyLoggedInAdmin):
     # ).grid(row=0, column=0, sticky=W, pady=10)
     ws.mainloop()
 
+Main_Admin_Page('Adam')
