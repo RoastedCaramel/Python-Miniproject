@@ -1,10 +1,12 @@
 from tkinter import *
 from tkinter import ttk, messagebox
 
+from app import LoginPage
 
-def manage_computer():
+
+def manage_computer(currentlyLoggedInAdmin):
     ws = Tk()
-    ws.title('Management Page')
+    ws.title('Manage Computer Terminals')
     ws.geometry('380x300')
     # ws.config(bg='#0B5A81')
     # f = ('Times', 14)
