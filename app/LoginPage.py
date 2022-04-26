@@ -18,7 +18,6 @@ def login_response(email_tf, pwd_tf, ws):
         c = con.cursor()
         r = con.cursor()
         userData = []
-
         c.execute("Select * from customer")
         r.execute("Select * from admin")
         userData = c.fetchall()
