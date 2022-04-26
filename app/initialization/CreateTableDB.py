@@ -43,7 +43,7 @@ def earningsTable():
     con = pymysql.connect(host=Constants.HOST, user=Constants.USER, db=Constants.DATABASE)
     cur = con.cursor()
     cur.execute(
-        "CREATE TABLE session_earnings (computer_id INT PRIMARY KEY NOT NULL,user VARCHAR(255), user_id VARCHAR(255) FOREIGN KEY REFERENCES customer(user_id)),start_time TIME,end_time TIME")
+        "CREATE TABLE session_earnings (bill_id INT computer_id INT PRIMARY KEY NOT NULL,user VARCHAR(255), user_id VARCHAR(255) FOREIGN KEY REFERENCES customer(user_id)),start_time TIME,end_time TIME")
     con.commit()
 
 # un comment below to create tables and insert values
@@ -51,4 +51,3 @@ def earningsTable():
 # adminTable()
 # insertingAdmins()
 # computerTable()
-# ghbuosNg osg

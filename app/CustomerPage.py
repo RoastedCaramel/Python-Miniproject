@@ -4,6 +4,8 @@ from tkinter import *
 import Constants
 import pymysql
 
+from app import LoginPage
+
 
 def fetch_user_data(uid, current_time):
     global data
@@ -61,6 +63,8 @@ def Customer_Page(uid):
         add_logout_data_to_db()
         # LoginPage.Login_Page()
         # TODO display bill and add earnings to database
+
+        LoginPage.Login_Page()
         return
 
     logout_btn = Button(
