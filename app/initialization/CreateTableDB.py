@@ -1,3 +1,5 @@
+import uuid
+
 import pymysql
 from app import Constants
 
@@ -20,6 +22,23 @@ def adminTable():
     con.commit()
 
 
+def insertingCustomers():
+    for i in range(50):
+        con = pymysql.connect(host=Constants.HOST, user=Constants.USER, db=Constants.DATABASE)
+        cur = con.cursor()
+        uid = uuid.uuid4()
+        sql = "INSERT INTO customer(user_id, name, email, contact, gender, password) VALUES ('%s','%s','%s', '%d', '%s', '%s')"
+        values = (uid,
+                  f'name{i}',
+                  f'emai{i}@email',
+                  4125567883,
+                  'male',
+                  'abc123')
+        cur.execute(sql % values)
+        con.commit()
+        con.close()
+
+
 def insertingAdmins():
     con = pymysql.connect(host=Constants.HOST, user=Constants.USER, db=Constants.DATABASE)
     cur = con.cursor()
@@ -34,7 +53,7 @@ def computerTable():
     con = pymysql.connect(host=Constants.HOST, user=Constants.USER, db=Constants.DATABASE)
     cur = con.cursor()
     cur.execute(
-        "CREATE TABLE computer (computer_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,inUse INT NOT NULL,"
+        "CREATE TABLE computer (computer_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,inUse VARCHAR(10) DEFAULT 'FALSE',"
         "start_time TIME, user_id VARCHAR(255), FOREIGN KEY (user_id) REFERENCES customer (user_id))")
     con.commit()
 
@@ -48,6 +67,7 @@ def earningsTable():
 
 # un comment below to create tables and insert values
 # customerTable()
+# insertingCustomers()
 # adminTable()
 # insertingAdmins()
 # computerTable()

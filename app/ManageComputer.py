@@ -28,9 +28,8 @@ def manage_computer(currentlyLoggedInAdmin):
     menuBar.add_cascade(label="Admin", menu=adminMenu)
     #   Menu 2: Computer menu
     computerMenu = Menu(menuBar, tearoff=0)
-    computerMenu.add_command(label="Add Computer", command=NONE)
-    computerMenu.add_command(label="Remove Computer", command=NONE)
-    menuBar.add_cascade(label='Manage Computer', menu=computerMenu)
+    computerMenu.add_command(label="Manage Computer", command=NONE)
+    menuBar.add_cascade(label='Computer', menu=computerMenu)
     #   Menu 3: Registered Users Menu
     registeredUsersMenu = Menu(menuBar, tearoff=0)
     menuBar.add_cascade(label="Registered Customers", command=NONE, menu=registeredUsersMenu)

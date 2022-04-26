@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import ttk, messagebox
 
 import LoginPage
+from app import DisplayCustomers
 
 
 def get_computer_details():
@@ -27,6 +28,10 @@ def Main_Admin_Page(currentlyLoggedInAdmin):
         messagebox.showinfo('Login Status', 'You have logged out as administrator!')
         LoginPage.Login_Page()
 
+    def manage_regestered_users():
+        ws.destroy()
+        DisplayCustomers.display_customers(currentlyLoggedInAdmin)
+
     adminMenu = Menu(menuBar, tearoff=0)
     adminMenu.add_command(label=f"Logged in as {currentlyLoggedInAdmin}", font=('Times', 11, 'bold'), command=NONE)
     adminMenu.add_separator()
@@ -34,12 +39,12 @@ def Main_Admin_Page(currentlyLoggedInAdmin):
     menuBar.add_cascade(label="Admin", menu=adminMenu)
     #   Menu 2: Computer menu
     computerMenu = Menu(menuBar, tearoff=0)
-    computerMenu.add_command(label="Add Computer", command=NONE)
-    computerMenu.add_command(label="Remove Computer", command=NONE)
-    menuBar.add_cascade(label='Manage Computer', menu=computerMenu)
+    computerMenu.add_command(label="Manage Computer", command=NONE)
+    menuBar.add_cascade(label='Computer', menu=computerMenu)
     #   Menu 3: Registered Users Menu
     registeredUsersMenu = Menu(menuBar, tearoff=0)
-    menuBar.add_cascade(label="Registered Customers", command=NONE, menu=registeredUsersMenu)
+    registeredUsersMenu.add_command(label='Manage Customers', command=manage_regestered_users)
+    menuBar.add_cascade(label="Registered Customers", menu=registeredUsersMenu)
     #   Menu 4: Earnings Menu
     accountingMenu = Menu(menuBar, tearoff=0)
     accountingMenu.add_command(label="Daily Earning", command=NONE)
@@ -78,19 +83,19 @@ def Main_Admin_Page(currentlyLoggedInAdmin):
         Label(main_frame, text=computer_data[i][0]).grid(row=displayComputerInfoRowNumber, column=0)
         # Check Availability
         if computer_data[i][1]:
+            Label(main_frame, text='Not Available', background='red').grid(row=displayComputerInfoRowNumber, column=1)
+            # User id
+            Label(main_frame, text=computer_data[i][3]).grid(row=displayComputerInfoRowNumber, column=2)
+            # user Start Time
+            Label(main_frame, text=computer_data[i][2]).grid(row=displayComputerInfoRowNumber, column=3)
+
+        else:
             # Availability
             Label(main_frame, text='Available', background='green').grid(row=displayComputerInfoRowNumber, column=1)
             # User id
             Label(main_frame, text='').grid(row=displayComputerInfoRowNumber, column=2)
             # user Start Time
             Label(main_frame, text='').grid(row=displayComputerInfoRowNumber, column=3)
-
-        else:
-            Label(main_frame, text='Not Available', background='red').grid(row=displayComputerInfoRowNumber, column=1)
-            # User id
-            Label(main_frame, text=computer_data[i][3]).grid(row=displayComputerInfoRowNumber, column=2)
-            # user Start Time
-            Label(main_frame, text=computer_data[i][2]).grid(row=displayComputerInfoRowNumber, column=3)
         displayComputerInfoRowNumber += 1  # to increase the row number to display each computer
 
     # bg='#CCCCCC',
