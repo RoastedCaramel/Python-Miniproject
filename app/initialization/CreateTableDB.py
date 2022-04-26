@@ -46,6 +46,7 @@ def earningsTable():
         "CREATE TABLE session_earnings (computer_id INT PRIMARY KEY NOT NULL,user VARCHAR(255), user_id VARCHAR(255) FOREIGN KEY REFERENCES customer(user_id)),start_time TIME,end_time TIME")
     con.commit()
 
+# un comment below to create tables and insert values
 # customerTable()
 # adminTable()
 # insertingAdmins()
