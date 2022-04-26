@@ -84,7 +84,7 @@ def display_customers(currentlyLoggedInAdmin):
     second_frame = Frame(my_canvas)
     my_canvas.create_window((0, 0), window=second_frame, anchor='nw')
 
-    def refresh(self):
+    def refresh():
         ws.destroy()
         display_customers(currentlyLoggedInAdmin)
 
@@ -99,10 +99,9 @@ def display_customers(currentlyLoggedInAdmin):
             c.execute(sql)
             con.commit()
             con.close()
-            Tk.update(ws)
         except Exception as ep:
             messagebox.showerror(f"Error: {ep}")
-        refresh(second_frame)
+        refresh()
 
     Label(second_frame, text='No.').grid(row=0, column=0, padx=50, sticky='n')
     Label(second_frame, text="Customer Name").grid(row=0, padx=30, column=1, sticky='n')
@@ -111,6 +110,5 @@ def display_customers(currentlyLoggedInAdmin):
         Label(second_frame, text=uname[customer]).grid(row=customer + 1, column=1, pady=5, padx=5)
 
     ws.mainloop()
-
 
 # display_customers("Adam")
