@@ -20,8 +20,8 @@ def fetch_all_registered_users():
 def display_customers(currentlyLoggedInAdmin):
     ws = Tk()
     ws.title('Registered Customers')
-    ws.geometry('400x300')
-    # ws.config(bg='#0B5A81')
+    ws.geometry('500x300')
+    ws.config(padx=10)
     # f = ('Times', 14)
     menuFont = ('Times', 12)
     # Menu Bar
@@ -58,9 +58,10 @@ def display_customers(currentlyLoggedInAdmin):
         bd=2,
         relief=SOLID,
         text="Registered Customers",
-        font=('Times', 20)
+        font=('Times', 20),
+        padx=10,
     )
-    main_frame.pack(padx=5, pady=5)
+    main_frame.pack(padx=5, pady=5,fill='x')
     userData = fetch_all_registered_users()
     uid = [0] * len(userData)
     uname = [0] * len(userData)
@@ -73,6 +74,7 @@ def display_customers(currentlyLoggedInAdmin):
     delete_customer.pack()
     Button(main_frame, text="REVOKE", background='red', foreground='white',
            command=lambda: remove_customer(delete_customer)).pack()
+    # Canvas
     my_canvas = Canvas(main_frame)
     my_canvas.pack(side=LEFT, fill=BOTH)
     my_scrollbar = ttk.Scrollbar(main_frame, orient=VERTICAL, command=my_canvas.yview)
@@ -104,7 +106,7 @@ def display_customers(currentlyLoggedInAdmin):
         refresh()
 
     Label(second_frame, text='No.').grid(row=0, column=0, padx=50, sticky='n')
-    Label(second_frame, text="Customer Name").grid(row=0, padx=30, column=1, sticky='n')
+    Label(second_frame, text="Customer Name").grid(row=0, padx=50, column=1, sticky='n')
     for customer in range(len(userData)):
         Label(second_frame, text=customer).grid(row=customer + 1, column=0, pady=5, padx=5)
         Label(second_frame, text=uname[customer]).grid(row=customer + 1, column=1, pady=5, padx=5)

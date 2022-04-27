@@ -1,21 +1,30 @@
 from tkinter import *
 from tkinter import ttk, messagebox
 
+import pymysql
+
 import LoginPage
-from app import DisplayCustomers
+from app import DisplayCustomers, Constants
 from app.ManageComputer import manage_computer
 
 
 def get_computer_details():
     # computer id(int), in use(boolean), UserUsingStartTime(String),UserUsingID(String)
-    data = [[1, False, '05:30', 'id1'], [2, True, '06:30', 'id2'], [3, False, '07:30', 'id3']]
-    return data
+    # data = [[1, False, '05:30', 'id1'], [2, True, '06:30', 'id2'], [3, False, '07:30', 'id3']]
+    try:
+        con = pymysql.connect(host=Constants.HOST, user=Constants.USER, db=Constants.DATABASE)
+        c = con.cursor()
+        c.execute("Select * from computer")
+        computerData = c.fetchall()
+        return computerData
+    except Exception as ep:
+        messagebox.showerror(f"Error: {ep}")
 
 
 def Main_Admin_Page(currentlyLoggedInAdmin):
     ws = Tk()
     ws.title('Management Page')
-    ws.geometry('380x300')
+    ws.geometry('500x300')
     # ws.config(bg='#0B5A81')
     # f = ('Times', 14)
     menuFont = ('Times', 12)
@@ -68,11 +77,23 @@ def Main_Admin_Page(currentlyLoggedInAdmin):
         text="Computer Terminals",
         font=('Times', 20)
     )
-    main_frame.pack()
+    main_frame.pack(fill='x')
+
+    # Canvas
+    # my_canvas = Canvas(main_frame)
+    # my_canvas.pack(side=LEFT, fill=BOTH)
+    # my_scrollbar = ttk.Scrollbar(main_frame, orient=VERTICAL, command=my_canvas.yview)
+    # my_scrollbar.pack(side=RIGHT, fill=Y)
+    # my_canvas.configure(yscrollcommand=my_scrollbar.set)
+    # my_canvas.bind('<Configure>',
+    #                lambda e:
+    #                my_canvas.configure(scrollregion=my_canvas.bbox("all")))
+    # second_frame = Frame(my_canvas)
+    # my_canvas.create_window((0, 0), window=second_frame, anchor='nw')
 
     Label(main_frame, text="Computer No.").grid(row=0, column=0, pady=10, padx=10)
     Label(main_frame, text="Availability").grid(row=0, column=1, pady=10, padx=10)
-    Label(main_frame, text="User").grid(row=0, column=2, pady=10, padx=10)
+    Label(main_frame, text="User Id").grid(row=0, column=2, pady=10, padx=10)
     Label(main_frame, text="Start Time").grid(row=0, column=3, pady=10, padx=10)
     ttk.Separator(main_frame, orient='horizontal').grid(column=0, row=1, columnspan=4, sticky='ew')
     # TODO Add vertical separators for each column
@@ -88,30 +109,25 @@ def Main_Admin_Page(currentlyLoggedInAdmin):
     for i in range(0, len(computer_data)):
         # computer ID
         Label(main_frame, text=computer_data[i][0]).grid(row=displayComputerInfoRowNumber, column=0)
+        print(computer_data[i][2])
         # Check Availability
-        if computer_data[i][1]:
+        if computer_data[i][1] == 'True':
             Label(main_frame, text='Not Available', background='red').grid(row=displayComputerInfoRowNumber, column=1)
             # User id
             Label(main_frame, text=computer_data[i][3]).grid(row=displayComputerInfoRowNumber, column=2)
             # user Start Time
             Label(main_frame, text=computer_data[i][2]).grid(row=displayComputerInfoRowNumber, column=3)
 
-        else:
+        elif computer_data[i][1] == 'False':
             # Availability
             Label(main_frame, text='Available', background='green').grid(row=displayComputerInfoRowNumber, column=1)
             # User id
-            Label(main_frame, text='').grid(row=displayComputerInfoRowNumber, column=2)
+            Label(main_frame, text='').grid(row=displayComputerInfoRowNumber, column=2, columnspan=2)
             # user Start Time
             Label(main_frame, text='').grid(row=displayComputerInfoRowNumber, column=3)
-        displayComputerInfoRowNumber += 1  # to increase the row number to display each computer
+        displayComputerInfoRowNumber += 1
 
-    # bg='#CCCCCC',
-    # Label(
-    #     main_frame,
-    #     text="Computer Terminals",
-    #     bg='red',
-    #     font=f
-    # ).grid(row=0, column=0, sticky=W, pady=10)
     ws.mainloop()
 
-# Main_Admin_Page('Adam')
+
+Main_Admin_Page('Adam')
