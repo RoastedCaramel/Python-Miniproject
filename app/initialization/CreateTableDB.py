@@ -1,5 +1,5 @@
 import uuid
-
+import random
 import pymysql
 from app import Constants
 
@@ -27,7 +27,8 @@ def insertingCustomers():
         con = pymysql.connect(host=Constants.HOST, user=Constants.USER, db=Constants.DATABASE)
         cur = con.cursor()
         uid = uuid.uuid4()
-        sql = "INSERT INTO customer(user_id, name, email, contact, gender, password) VALUES ('%s','%s','%s', '%d', '%s', '%s')"
+        sql = "INSERT INTO customer(user_id, name, email, contact, gender, password) VALUES ('%s','%s','%s', '%d', "
+        "'%s', '%s')"
         values = (uid,
                   f'name{i}',
                   f'emai{i}@email',
@@ -62,8 +63,24 @@ def earningsTable():
     con = pymysql.connect(host=Constants.HOST, user=Constants.USER, db=Constants.DATABASE)
     cur = con.cursor()
     cur.execute(
-        "CREATE TABLE session_earnings (bill_id INT computer_id INT PRIMARY KEY NOT NULL,user VARCHAR(255), user_id VARCHAR(255) FOREIGN KEY REFERENCES customer(user_id)),start_time TIME,end_time TIME")
+        "CREATE TABLE session_earnings (bill_id INT PRIMARY KEY AUTO_INCREMENT, computer_id INT, FOREIGN KEY "
+        "(computer_id) REFERENCES computer (computer_id),user_id VARCHAR(255), FOREIGN KEY (user_id) REFERENCES "
+        "customer(user_id), date DATE, earning INT)")
     con.commit()
+
+
+def insertEarnings():
+    for i in range(50):
+        con = pymysql.connect(host=Constants.HOST, user=Constants.USER, db=Constants.DATABASE)
+        cur = con.cursor()
+        uid = uuid.uuid4()
+        sql = "INSERT INTO session_earnings(computer_id, user_id, date, earning) VALUES ('%d','%s', current_date(), '%d')"
+        values = (2,
+                  '000b308e-f9e7-4fb8-83fc-5c17ba9ed98b',
+                  random.randrange(50, 150))
+        cur.execute(sql % values)
+        con.commit()
+        con.close()
 
 # un comment below to create tables and insert values
 # customerTable()
@@ -71,3 +88,5 @@ def earningsTable():
 # adminTable()
 # insertingAdmins()
 # computerTable()
+# earningsTable()
+# insertEarnings()
