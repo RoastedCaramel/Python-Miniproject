@@ -13,7 +13,6 @@ def fetch_daily_earning_data():
         con = pymysql.connect(host=Constants.HOST, user=Constants.USER, db=Constants.DATABASE)
         c = con.cursor()
         c.execute("Select * from session_earnings WHERE DATE(date) = CURDATE()")
-        earningData = []
         earningData = c.fetchall()
         return earningData
     except Exception as ep:
