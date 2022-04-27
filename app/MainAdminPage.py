@@ -3,6 +3,7 @@ from tkinter import ttk, messagebox
 
 import LoginPage
 from app import DisplayCustomers
+from app.ManageComputer import manage_computer
 
 
 def get_computer_details():
@@ -28,20 +29,26 @@ def Main_Admin_Page(currentlyLoggedInAdmin):
         messagebox.showinfo('Login Status', 'You have logged out as administrator!')
         LoginPage.Login_Page()
 
-    def manage_regestered_users():
-        ws.destroy()
-        DisplayCustomers.display_customers(currentlyLoggedInAdmin)
-
     adminMenu = Menu(menuBar, tearoff=0)
     adminMenu.add_command(label=f"Logged in as {currentlyLoggedInAdmin}", font=('Times', 11, 'bold'), command=NONE)
     adminMenu.add_separator()
     adminMenu.add_command(label="logout", font=('Times', 11), command=adminLogout)
     menuBar.add_cascade(label="Admin", menu=adminMenu)
+
     #   Menu 2: Computer menu
+    def manage_computers():
+        ws.destroy()
+        manage_computer(currentlyLoggedInAdmin)
+
     computerMenu = Menu(menuBar, tearoff=0)
-    computerMenu.add_command(label="Manage Computer", command=NONE)
+    computerMenu.add_command(label="Manage Computer", command=manage_computers)
     menuBar.add_cascade(label='Computer', menu=computerMenu)
+
     #   Menu 3: Registered Users Menu
+    def manage_regestered_users():
+        ws.destroy()
+        DisplayCustomers.display_customers(currentlyLoggedInAdmin)
+
     registeredUsersMenu = Menu(menuBar, tearoff=0)
     registeredUsersMenu.add_command(label='Manage Customers', command=manage_regestered_users)
     menuBar.add_cascade(label="Registered Customers", menu=registeredUsersMenu)
