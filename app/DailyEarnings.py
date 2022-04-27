@@ -19,7 +19,18 @@ def fetch_daily_earning_data():
         messagebox.showerror(f"Error: {ep}")
 
 
-def daily_earnings(currentlyLoggedInAdmin):
+def fetch_monthly_earning_data():
+    try:
+        con = pymysql.connect(host=Constants.HOST, user=Constants.USER, db=Constants.DATABASE)
+        c = con.cursor()
+        c.execute("Select * from session_earnings WHERE MONTH(date) = MONTH(CURDATE())")
+        earningData = c.fetchall()
+        return earningData
+    except Exception as ep:
+        messagebox.showerror(f"Error: {ep}")
+
+
+def daily_monthly_earnings(currentlyLoggedInAdmin, typeOfReq):
     ws = Tk()
     ws.title('Daily Earnings')
     ws.geometry('550x330')
@@ -59,20 +70,39 @@ def daily_earnings(currentlyLoggedInAdmin):
     registeredUsersMenu = Menu(menuBar, tearoff=0)
     registeredUsersMenu.add_command(label='Manage Customers', command=manage_regestered_users)
     menuBar.add_cascade(label="Registered Customers", menu=registeredUsersMenu)
+
     #   Menu 4: Earnings Menu
-    accountingMenu = Menu(menuBar, tearoff=0)
-    # accountingMenu.add_command(label="Daily Earning", command=NONE)
-    accountingMenu.add_command(label="Monthly Earning", command=NONE)
+    if typeOfReq == 0:
+        def manage_monthly_earnings():
+            ws.destroy()
+            daily_monthly_earnings(currentlyLoggedInAdmin, 1)
+
+        accountingMenu = Menu(menuBar, tearoff=0)
+        accountingMenu.add_command(label="Monthly Earning", command=manage_monthly_earnings)
+    if typeOfReq == 1:
+        def manage_daily_earnings():
+            ws.destroy()
+            daily_monthly_earnings(currentlyLoggedInAdmin, 0)
+
+        accountingMenu = Menu(menuBar, tearoff=0)
+        accountingMenu.add_command(label="Daily Earning", command=manage_daily_earnings)
     menuBar.add_cascade(label="Earnings", menu=accountingMenu)
 
     ws.config(menu=menuBar)
 
     # Main Frame
+    currentDateMonth = datetime.datetime.now()
+    monthName = currentDateMonth.strftime("%B")
+    currentDate = datetime.date.today()
+    if typeOfReq == 0:
+        textLabel = f"Earnings for : {currentDate}"
+    elif typeOfReq == 1:
+        textLabel = f"Monthly Earnings for {monthName}"
     main_frame = LabelFrame(
         ws,
         bd=2,
         relief=SOLID,
-        text=f"Daily Earnings : {datetime.date.today()}",
+        text=textLabel,
         font=('Times', 20)
     )
     main_frame.pack(fill='x')
@@ -92,7 +122,11 @@ def daily_earnings(currentlyLoggedInAdmin):
     trv.heading('5', text='User Id')
     # my_scrollbar = ttk.Scrollbar(, orient=VERTICAL, command=trv.yview)
     # my_scrollbar.pack(side=RIGHT, fill=Y)
-    earningData = fetch_daily_earning_data()
+    if typeOfReq == 0:
+        earningData = fetch_daily_earning_data()
+    elif typeOfReq == 1:
+        earningData = fetch_monthly_earning_data()
+
     amountEarned = 0
     for i in earningData:
         trv.insert('', 'end', iid=i[0], text=i[0], values=(i[0], i[3], i[4], i[1], i[2]))
@@ -101,4 +135,4 @@ def daily_earnings(currentlyLoggedInAdmin):
     ws.mainloop()
 
 
-# daily_earnings('adam')
+daily_monthly_earnings('adam', 1)
