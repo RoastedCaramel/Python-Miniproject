@@ -139,4 +139,4 @@ def manage_computer(currentlyLoggedInAdmin):
     ws.mainloop()
 
 
-manage_computer('Adam')
+# manage_computer('Adam')
