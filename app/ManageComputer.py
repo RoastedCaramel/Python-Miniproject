@@ -10,6 +10,7 @@ import numpy as np
 
 # computer_id = random.seed(10)
 # print("computer_id=", computer_id)
+from app.DailyEarnings import daily_monthly_earnings
 
 
 def manage_computer(currentlyLoggedInAdmin):
@@ -36,21 +37,35 @@ def manage_computer(currentlyLoggedInAdmin):
     menuBar.add_cascade(label="Admin", menu=adminMenu)
 
     #   Menu 2: Computer menu
+    # def manage_computers():
+    #     ws.destroy()
+    #     manage_computer(currentlyLoggedInAdmin)
+    #
     # computerMenu = Menu(menuBar, tearoff=0)
-    # computerMenu.add_command(label="Add Computer", command=NONE)
-    # computerMenu.add_command(label="Remove Computer", command=NONE)
-    # menuBar.add_cascade(label='Manage Computer', menu=computerMenu)
+    # computerMenu.add_command(label="Manage Computer", command=manage_computers)
+    # menuBar.add_cascade(label='Computer', menu=computerMenu)
+
     #   Menu 3: Registered Users Menu
     def manage_regestered_users():
         ws.destroy()
         DisplayCustomers.display_customers(currentlyLoggedInAdmin)
 
     registeredUsersMenu = Menu(menuBar, tearoff=0)
-    menuBar.add_cascade(label="Registered Customers", command=manage_regestered_users, menu=registeredUsersMenu)
+    registeredUsersMenu.add_command(label='Manage Customers', command=manage_regestered_users)
+    menuBar.add_cascade(label="Registered Customers", menu=registeredUsersMenu)
+
     #   Menu 4: Earnings Menu
+    def manage_monthly_earnings():
+        ws.destroy()
+        daily_monthly_earnings(currentlyLoggedInAdmin, 1)
+
+    def manage_daily_earnings():
+        ws.destroy()
+        daily_monthly_earnings(currentlyLoggedInAdmin, 0)
+
     accountingMenu = Menu(menuBar, tearoff=0)
-    accountingMenu.add_command(label="Daily Earning", command=NONE)
-    accountingMenu.add_command(label="Monthly Earning", command=NONE)
+    accountingMenu.add_command(label="Daily Earning", command=manage_daily_earnings)
+    accountingMenu.add_command(label="Monthly Earning", command=manage_monthly_earnings)
     menuBar.add_cascade(label="Earnings", menu=accountingMenu)
 
     ws.config(menu=menuBar)

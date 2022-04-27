@@ -3,6 +3,8 @@ from tkinter import ttk, messagebox
 
 import pymysql
 from app import LoginPage, Constants
+from app.DailyEarnings import daily_monthly_earnings
+from app.ManageComputer import manage_computer
 
 
 def fetch_all_registered_users():
@@ -38,20 +40,42 @@ def display_customers(currentlyLoggedInAdmin):
     adminMenu.add_separator()
     adminMenu.add_command(label="logout", font=('Times', 11), command=adminLogout)
     menuBar.add_cascade(label="Admin", menu=adminMenu)
+
     #   Menu 2: Computer menu
+    def manage_computers():
+        ws.destroy()
+        manage_computer(currentlyLoggedInAdmin)
+
     computerMenu = Menu(menuBar, tearoff=0)
-    computerMenu.add_command(label="Add Computer", command=NONE)
-    computerMenu.add_command(label="Remove Computer", command=NONE)
-    menuBar.add_cascade(label='Manage Computer', menu=computerMenu)
+    computerMenu.add_command(label="Manage Computer", command=manage_computers)
+    menuBar.add_cascade(label='Computer', menu=computerMenu)
+
     #   Menu 3: Registered Users Menu
+    # def manage_regestered_users():
+    #     ws.destroy()
+    #     DisplayCustomers.display_customers(currentlyLoggedInAdmin)
+    #
     # registeredUsersMenu = Menu(menuBar, tearoff=0)
-    # menuBar.add_cascade(label="Registered Customers", command=NONE, menu=registeredUsersMenu)
+    # registeredUsersMenu.add_command(label='Manage Customers', command=manage_regestered_users)
+    # menuBar.add_cascade(label="Registered Customers", menu=registeredUsersMenu)
+
     #   Menu 4: Earnings Menu
+    def manage_monthly_earnings():
+        ws.destroy()
+        daily_monthly_earnings(currentlyLoggedInAdmin, 1)
+
+    def manage_daily_earnings():
+        ws.destroy()
+        daily_monthly_earnings(currentlyLoggedInAdmin, 0)
+
     accountingMenu = Menu(menuBar, tearoff=0)
-    accountingMenu.add_command(label="Daily Earning", command=NONE)
-    accountingMenu.add_command(label="Monthly Earning", command=NONE)
+    accountingMenu.add_command(label="Daily Earning", command=manage_daily_earnings)
+    accountingMenu.add_command(label="Monthly Earning", command=manage_monthly_earnings)
     menuBar.add_cascade(label="Earnings", menu=accountingMenu)
+
     ws.config(menu=menuBar)
+
+
     # Main Frame
     main_frame = LabelFrame(
         ws,

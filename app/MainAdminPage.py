@@ -5,6 +5,7 @@ import pymysql
 
 import LoginPage
 from app import DisplayCustomers, Constants
+from app.DailyEarnings import daily_monthly_earnings
 from app.ManageComputer import manage_computer
 
 
@@ -61,10 +62,19 @@ def Main_Admin_Page(currentlyLoggedInAdmin):
     registeredUsersMenu = Menu(menuBar, tearoff=0)
     registeredUsersMenu.add_command(label='Manage Customers', command=manage_regestered_users)
     menuBar.add_cascade(label="Registered Customers", menu=registeredUsersMenu)
+
     #   Menu 4: Earnings Menu
+    def manage_monthly_earnings():
+        ws.destroy()
+        daily_monthly_earnings(currentlyLoggedInAdmin, 1)
+
+    def manage_daily_earnings():
+        ws.destroy()
+        daily_monthly_earnings(currentlyLoggedInAdmin, 0)
+
     accountingMenu = Menu(menuBar, tearoff=0)
-    accountingMenu.add_command(label="Daily Earning", command=NONE)
-    accountingMenu.add_command(label="Monthly Earning", command=NONE)
+    accountingMenu.add_command(label="Daily Earning", command=manage_daily_earnings)
+    accountingMenu.add_command(label="Monthly Earning", command=manage_monthly_earnings)
     menuBar.add_cascade(label="Earnings", menu=accountingMenu)
 
     ws.config(menu=menuBar)
@@ -79,7 +89,7 @@ def Main_Admin_Page(currentlyLoggedInAdmin):
     )
     main_frame.pack(fill='x')
 
-    # Canvas
+    # Canvas to make scroll bar
     # my_canvas = Canvas(main_frame)
     # my_canvas.pack(side=LEFT, fill=BOTH)
     # my_scrollbar = ttk.Scrollbar(main_frame, orient=VERTICAL, command=my_canvas.yview)
@@ -128,6 +138,5 @@ def Main_Admin_Page(currentlyLoggedInAdmin):
         displayComputerInfoRowNumber += 1
 
     ws.mainloop()
-
 
 Main_Admin_Page('Adam')
