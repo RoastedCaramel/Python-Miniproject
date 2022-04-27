@@ -22,7 +22,7 @@ def fetch_daily_earning_data():
 def daily_earnings(currentlyLoggedInAdmin):
     ws = Tk()
     ws.title('Daily Earnings')
-    ws.geometry('550x300')
+    ws.geometry('550x330')
     ws.config(padx=10, pady=10)
     # f = ('Times', 14)
     menuFont = ('Times', 12)
@@ -93,8 +93,11 @@ def daily_earnings(currentlyLoggedInAdmin):
     # my_scrollbar = ttk.Scrollbar(, orient=VERTICAL, command=trv.yview)
     # my_scrollbar.pack(side=RIGHT, fill=Y)
     earningData = fetch_daily_earning_data()
+    amountEarned = 0
     for i in earningData:
         trv.insert('', 'end', iid=i[0], text=i[0], values=(i[0], i[3], i[4], i[1], i[2]))
+        amountEarned += i[4]
+    Label(main_frame, text=f"Amount Earned  =  ₹{amountEarned}", font=('Sans', 20)).pack(side='bottom')
     ws.mainloop()
 
 

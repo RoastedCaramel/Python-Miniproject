@@ -75,7 +75,7 @@ def insertEarnings():
         cur = con.cursor()
         uid = uuid.uuid4()
         sql = "INSERT INTO session_earnings(computer_id, user_id, date, earning) VALUES ('%d','%s', current_date(), '%d')"
-        values = (2,
+        values = (1,
                   '000b308e-f9e7-4fb8-83fc-5c17ba9ed98b',
                   random.randrange(50, 150))
         cur.execute(sql % values)
