@@ -3,13 +3,10 @@ from tkinter import ttk, messagebox
 
 import pymysql
 
-from app import Constants
-
+import Constants
 
 
 def get_computer_details():
-    # computer id(int), in use(boolean), UserUsingStartTime(String),UserUsingID(String)
-    # data = [[1, False, '05:30', 'id1'], [2, True, '06:30', 'id2'], [3, False, '07:30', 'id3']]
     try:
         con = pymysql.connect(host=Constants.HOST, user=Constants.USER, db=Constants.DATABASE)
         c = con.cursor()
@@ -24,8 +21,6 @@ def Main_Admin_Page(currentlyLoggedInAdmin):
     ws = Tk()
     ws.title('Management Page')
     ws.geometry('500x300')
-    # ws.config(bg='#0B5A81')
-    # f = ('Times', 14)
     menuFont = ('Times', 12)
 
     # Menu Bar
@@ -35,7 +30,7 @@ def Main_Admin_Page(currentlyLoggedInAdmin):
     def adminLogout():
         ws.destroy()
         messagebox.showinfo('Successfully Logged out', 'You have logged out as administrator!')
-        from app.LoginPage import Login_Page
+        from LoginPage import Login_Page
         Login_Page()
 
     adminMenu = Menu(menuBar, tearoff=0)
@@ -47,7 +42,7 @@ def Main_Admin_Page(currentlyLoggedInAdmin):
     #   Menu 2: Computer menu
     def manage_computers():
         ws.destroy()
-        from app.ManageComputer import manage_computer
+        from ManageComputer import manage_computer
         manage_computer(currentlyLoggedInAdmin)
 
     computerMenu = Menu(menuBar, tearoff=0)
@@ -56,7 +51,7 @@ def Main_Admin_Page(currentlyLoggedInAdmin):
 
     #   Menu 3: Registered Users Menu
     def manage_regestered_users():
-        from app.DisplayCustomers import display_customers
+        from DisplayCustomers import display_customers
         ws.destroy()
         display_customers(currentlyLoggedInAdmin)
 
@@ -65,7 +60,7 @@ def Main_Admin_Page(currentlyLoggedInAdmin):
     menuBar.add_cascade(label="Registered Customers", menu=registeredUsersMenu)
 
     #   Menu 4: Earnings Menu
-    from app.DailyEarnings import daily_monthly_earnings
+    from DailyEarnings import daily_monthly_earnings
 
     def manage_monthly_earnings():
         ws.destroy()

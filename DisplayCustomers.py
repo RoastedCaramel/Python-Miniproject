@@ -2,11 +2,7 @@ from tkinter import *
 from tkinter import ttk, messagebox
 
 import pymysql
-from app import Constants
-
-
-# from app.DailyEarnings import daily_monthly_earnings
-# from app.ManageComputer import manage_computer
+import Constants
 
 
 def fetch_all_registered_users():
@@ -35,19 +31,25 @@ def display_customers(currentlyLoggedInAdmin):
     def adminLogout():
         ws.destroy()
         messagebox.showinfo('Successfully Logged out', 'You have logged out as administrator!')
-        from app.LoginPage import Login_Page
+        from LoginPage import Login_Page
         Login_Page()
+
+    def mainPage():
+        ws.destroy()
+        from MainAdminPage import Main_Admin_Page
+        Main_Admin_Page(currentlyLoggedInAdmin)
 
     adminMenu = Menu(menuBar, tearoff=0)
     adminMenu.add_command(label=f"Logged in as {currentlyLoggedInAdmin}", font=('Times', 11, 'bold'), command=NONE)
     adminMenu.add_separator()
+    adminMenu.add_command(label="Main Page", font=('Times', 11), command=mainPage)
     adminMenu.add_command(label="logout", font=('Times', 11), command=adminLogout)
     menuBar.add_cascade(label="Admin", menu=adminMenu)
 
     #   Menu 2: Computer menu
     def manage_computers():
         ws.destroy()
-        from app.ManageComputer import manage_computer
+        from ManageComputer import manage_computer
         manage_computer(currentlyLoggedInAdmin)
 
     computerMenu = Menu(menuBar, tearoff=0)
@@ -55,7 +57,7 @@ def display_customers(currentlyLoggedInAdmin):
     menuBar.add_cascade(label='Computer', menu=computerMenu)
 
     #   Menu 4: Earnings Menu
-    from app.DailyEarnings import daily_monthly_earnings
+    from DailyEarnings import daily_monthly_earnings
 
     def manage_monthly_earnings():
         ws.destroy()
@@ -132,5 +134,3 @@ def display_customers(currentlyLoggedInAdmin):
         Label(second_frame, text=uname[customer]).grid(row=customer + 1, column=1, pady=5, padx=5)
 
     ws.mainloop()
-
-# display_customers("Adam")

@@ -87,7 +87,7 @@ def registeringUser(register_name, register_email, register_mobile, var, registe
             messagebox.showerror("Error Registering",
                                  f"An Unexpected error occurred while registering. Please try again. Exception:{e1}")
         ws.destroy()
-        from app.LoginPage import Login_Page
+        from LoginPage import Login_Page
         Login_Page()
 
 
@@ -219,7 +219,7 @@ def Registeration_Page():
 
     def login():
         ws.destroy()
-        from app.LoginPage import Login_Page
+        from LoginPage import Login_Page
         Login_Page()
 
     register_btn = Button(

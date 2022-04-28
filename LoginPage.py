@@ -5,6 +5,20 @@ import Constants
 import pymysql
 
 
+def add_user_data_to_computer(uid, enteredComputerId):
+    try:
+        print(enteredComputerId)
+        con = pymysql.connect(host=Constants.HOST, user=Constants.USER, db=Constants.DATABASE)
+        cur = con.cursor()
+        sql = f"UPDATE computer SET inUse = 'True', start_time = CURTIME(), user_id ='{uid}' WHERE computer_id = {enteredComputerId}"
+        cur.execute(sql)
+        con.commit()
+        con.close()
+    except EXCEPTION as e1:
+        messagebox.showerror("Error Registering",
+                             f"An Unexpected error occurred while registering. Please try again. Exception:{e1}")
+
+
 def login_response(email_tf, pwd_tf, ws, cmp_tf):
     warn, userEmail, pwd, uid, userData, adminData, adminPassword, adminEmail, adminName, adminID \
         = '', [], [], [], [], [], [], [], [], []
@@ -38,7 +52,7 @@ def login_response(email_tf, pwd_tf, ws, cmp_tf):
         messagebox.showerror(f"Error: {ep}")
     enteredEmail = email_tf.get()
     enteredPassword = pwd_tf.get()
-    enteredComputer = cmp_tf.get()
+    enteredComputer = int(cmp_tf.get())
     check_counter = 0
     if enteredEmail == "":
         warn = "Username can't be empty"
@@ -55,7 +69,8 @@ def login_response(email_tf, pwd_tf, ws, cmp_tf):
                 ws.destroy()
                 messagebox.showinfo('Login Status', 'Logged in Successfully!')
                 # TODO Send the customer_uid[i] to the next page when login successful for customer and display the page
-                from app.CustomerPage import Customer_Page
+                add_user_data_to_computer(uid[i], enteredComputer)
+                from CustomerPage import Customer_Page
                 Customer_Page(uid[i], enteredComputer)
 
         for i in range(0, len(adminData)):
@@ -65,7 +80,7 @@ def login_response(email_tf, pwd_tf, ws, cmp_tf):
                 messagebox.showinfo('Login Status', 'Logged in Successfully as Admin!')
                 # TODO Send the admin_uid[i] to the next page when login successful for admin and display the page
                 ws.destroy()
-                from app.MainAdminPage import Main_Admin_Page
+                from MainAdminPage import Main_Admin_Page
                 Main_Admin_Page(loggedInAdminName)
                 break
         else:
@@ -134,7 +149,7 @@ def Login_Page():
 
     def reg():
         ws.destroy()
-        from app.RegisterationPage import Registeration_Page
+        from RegisterationPage import Registeration_Page
         Registeration_Page()
 
     register_btn = Button(

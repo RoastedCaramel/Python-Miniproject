@@ -19,18 +19,24 @@ def manage_computer(currentlyLoggedInAdmin):
     def adminLogout():
         ws.destroy()
         messagebox.showinfo('Login Status', 'You have logged out as administrator!')
-        from app.LoginPage import Login_Page
+        from LoginPage import Login_Page
         Login_Page()
+
+    def mainPage():
+        ws.destroy()
+        from MainAdminPage import Main_Admin_Page
+        Main_Admin_Page(currentlyLoggedInAdmin)
 
     adminMenu = Menu(menuBar, tearoff=0)
     adminMenu.add_command(label=f"Logged in as {currentlyLoggedInAdmin}", font=('Times', 11, 'bold'), command=NONE)
     adminMenu.add_separator()
+    adminMenu.add_command(label="Main Page", font=('Times', 11), command=mainPage)
     adminMenu.add_command(label="logout", font=('Times', 11), command=adminLogout)
     menuBar.add_cascade(label="Admin", menu=adminMenu)
 
     #   Menu 3: Registered Users Menu
     def manage_regestered_users():
-        from app.DisplayCustomers import display_customers
+        from DisplayCustomers import display_customers
         ws.destroy()
         display_customers(currentlyLoggedInAdmin)
 
@@ -39,7 +45,8 @@ def manage_computer(currentlyLoggedInAdmin):
     menuBar.add_cascade(label="Registered Customers", menu=registeredUsersMenu)
 
     #   Menu 4: Earnings Menu
-    from app.DailyEarnings import daily_monthly_earnings
+    from DailyEarnings import daily_monthly_earnings
+
     def manage_monthly_earnings():
         ws.destroy()
         daily_monthly_earnings(currentlyLoggedInAdmin, 1)
