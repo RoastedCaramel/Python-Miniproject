@@ -41,6 +41,20 @@ def add_logout_data_to_db(uid, totalAmount):
     con.close()
 
 
+def remove_user_data_from_computer(enteredComputerId):
+    try:
+        print(enteredComputerId)
+        con = pymysql.connect(host=Constants.HOST, user=Constants.USER, db=Constants.DATABASE)
+        cur = con.cursor()
+        sql = f"UPDATE computer SET inUse = 'False', start_time = '', user_id ='' WHERE computer_id = {enteredComputerId}"
+        cur.execute(sql)
+        con.commit()
+        con.close()
+    except EXCEPTION as e1:
+        messagebox.showerror("Logging Out",
+                             f"An Unexpected error occurred while Logging Out. Please try again. Exception:{e1}")
+
+
 def Customer_Page(uid, computerId):
     now = datetime.now()
     start_time = now.strftime("%H:%M:%S")
@@ -81,7 +95,7 @@ def Customer_Page(uid, computerId):
                     string = tt.strftime("%H:%M:%S")
                     display = string
 
-                    print(display)
+                    # print(display)
 
                     def get_sec(string):
 
@@ -139,12 +153,14 @@ def Customer_Page(uid, computerId):
             yt += f"\n\t\t\tTotal price :{totalAmount}\n"  # totalPrice
             bill_text_area.insert(1.0, yt)
             bill_text_area.pack(expand=True, fill=BOTH)
+            remove_user_data_from_computer(computerId)
             window.focus_set()
             window.protocol("WM_DELETE_WINDOW")
             window.mainloop()
 
         NewWindow()
-        # LoginPage.Login_Page()
+        import LoginPage
+        LoginPage.Login_Page()
         return
 
     logout_btn = Button(
