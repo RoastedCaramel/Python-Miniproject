@@ -2,9 +2,11 @@ from tkinter import *
 from tkinter import ttk, messagebox
 
 import pymysql
-from app import LoginPage, Constants
-from app.DailyEarnings import daily_monthly_earnings
-from app.ManageComputer import manage_computer
+from app import Constants
+
+
+# from app.DailyEarnings import daily_monthly_earnings
+# from app.ManageComputer import manage_computer
 
 
 def fetch_all_registered_users():
@@ -32,8 +34,9 @@ def display_customers(currentlyLoggedInAdmin):
     #   Menu 1: Admin menu
     def adminLogout():
         ws.destroy()
-        messagebox.showinfo('Login Status', 'You have logged out as administrator!')
-        LoginPage.Login_Page()
+        messagebox.showinfo('Successfully Logged out', 'You have logged out as administrator!')
+        from app.LoginPage import Login_Page
+        Login_Page()
 
     adminMenu = Menu(menuBar, tearoff=0)
     adminMenu.add_command(label=f"Logged in as {currentlyLoggedInAdmin}", font=('Times', 11, 'bold'), command=NONE)
@@ -44,22 +47,16 @@ def display_customers(currentlyLoggedInAdmin):
     #   Menu 2: Computer menu
     def manage_computers():
         ws.destroy()
+        from app.ManageComputer import manage_computer
         manage_computer(currentlyLoggedInAdmin)
 
     computerMenu = Menu(menuBar, tearoff=0)
     computerMenu.add_command(label="Manage Computer", command=manage_computers)
     menuBar.add_cascade(label='Computer', menu=computerMenu)
 
-    #   Menu 3: Registered Users Menu
-    # def manage_regestered_users():
-    #     ws.destroy()
-    #     DisplayCustomers.display_customers(currentlyLoggedInAdmin)
-    #
-    # registeredUsersMenu = Menu(menuBar, tearoff=0)
-    # registeredUsersMenu.add_command(label='Manage Customers', command=manage_regestered_users)
-    # menuBar.add_cascade(label="Registered Customers", menu=registeredUsersMenu)
-
     #   Menu 4: Earnings Menu
+    from app.DailyEarnings import daily_monthly_earnings
+
     def manage_monthly_earnings():
         ws.destroy()
         daily_monthly_earnings(currentlyLoggedInAdmin, 1)
@@ -75,7 +72,6 @@ def display_customers(currentlyLoggedInAdmin):
 
     ws.config(menu=menuBar)
 
-
     # Main Frame
     main_frame = LabelFrame(
         ws,
@@ -85,7 +81,7 @@ def display_customers(currentlyLoggedInAdmin):
         font=('Times', 20),
         padx=10,
     )
-    main_frame.pack(padx=5, pady=5,fill='x')
+    main_frame.pack(padx=5, pady=5, fill='x')
     userData = fetch_all_registered_users()
     uid = [0] * len(userData)
     uname = [0] * len(userData)

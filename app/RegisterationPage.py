@@ -5,7 +5,6 @@ from tkinter import messagebox
 import pymysql
 
 import Constants
-import LoginPage
 
 
 def validation(register_name, register_email, register_mobile, var, register_pwd, pwd_again):
@@ -87,8 +86,9 @@ def registeringUser(register_name, register_email, register_mobile, var, registe
         except EXCEPTION as e1:
             messagebox.showerror("Error Registering",
                                  f"An Unexpected error occurred while registering. Please try again. Exception:{e1}")
-        # TODO Add the list of computers page here when finished
         ws.destroy()
+        from app.LoginPage import Login_Page
+        Login_Page()
 
 
 def Registeration_Page():
@@ -219,7 +219,8 @@ def Registeration_Page():
 
     def login():
         ws.destroy()
-        LoginPage.Login_Page()
+        from app.LoginPage import Login_Page
+        Login_Page()
 
     register_btn = Button(
         right_frame,

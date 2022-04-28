@@ -1,15 +1,20 @@
 from datetime import datetime
 from tkinter import *
+import time
+from tkinter import messagebox
 
 import Constants
 import pymysql
 
-from app import LoginPage
+timeInSeconds = 0
+totalAmount = 0
+
+counter = 66600
+running = False
 
 
-def fetch_user_data(uid, current_time):
+def fetch_user_data(uid):
     global data
-    print(uid, current_time)
     # Fetching currently logged in customer data
     try:
         data = []
@@ -18,30 +23,35 @@ def fetch_user_data(uid, current_time):
         c.execute(f"Select * from customer WHERE user_id = '{uid}'")
         data = c.fetchall()
         con.close()
-    except EXCEPTION as e:
-        print(e)
+    except Exception as ep:
+        messagebox.showerror(f"Error: {ep}")
     return data[0]
 
 
-def add_logout_data_to_db():
-    try:
-        now = datetime.now()
-        end_time = now.strftime("%H:%M:%S")
-        data = []
-    except EXCEPTION as e:
-        print(e)
+def add_logout_data_to_db(uid, totalAmount):
+    con = pymysql.connect(host=Constants.HOST, user=Constants.USER, db=Constants.DATABASE)
+    cur = con.cursor()
+    sql = "INSERT INTO session_earnings(computer_id, user_id, date, earning) VALUES ('%d','%s', current_date(), '%d')"
+    values = (1,
+              uid,
+              totalAmount)
+    print(totalAmount)
+    cur.execute(sql % values)
+    con.commit()
+    con.close()
 
 
-def Customer_Page(uid):
+def Customer_Page(uid, computerId):
     now = datetime.now()
     start_time = now.strftime("%H:%M:%S")
     user_data = []
-    user_data = fetch_user_data(uid, start_time)
+    user_data = fetch_user_data(uid)
     print(user_data[1])
+
     ws = Tk()
     ws.title('Cyber Cafe Management App')
     ws.config(bg='#0B5A81')  # window background
-    ws.geometry('350x300')
+    ws.geometry('300x300')
 
     f = ('Times', 14)
     frame = Frame(
@@ -56,15 +66,85 @@ def Customer_Page(uid):
         ws,
         text=f"Welcome {user_data[1]}",
         bg='#CCCCCC',
-        font=('Times', 20)).grid(row=0, column=0, columnspan=2, sticky=N, padx=50, pady=10)
+        font=('Times', 20)).grid(row=0, column=0, columnspan=2, sticky=N, padx=60, pady=10)
+
+    def counter_label(label):
+        def count():
+            if running:
+                global counter
+
+                # To manage the initial delay.
+                if counter == 66600:
+                    display = "Starting..."
+                else:
+                    tt = datetime.fromtimestamp(counter)
+                    string = tt.strftime("%H:%M:%S")
+                    display = string
+
+                    print(display)
+
+                    def get_sec(string):
+
+                        H, M, S = string.split(':')
+                        return int(H) * 3600 + int(M) * 60 + int(S)
+
+                    global timeInSeconds
+                    timeInSeconds = int(get_sec(string))
+                    global totalAmount
+                    bill = 0.027 * timeInSeconds
+                    totalAmount = bill
+
+                label['text'] = display  # Or label.config(text=display)
+
+                label.after(1000, count)
+                counter += 1
+
+        # Triggering the start of the counter.
+        count()
+
+    # print(timeInSeconds)
 
     def logout():
         ws.destroy()
-        add_logout_data_to_db()
-        # LoginPage.Login_Page()
-        # TODO display bill and add earnings to database
+        add_logout_data_to_db(uid, totalAmount)
 
-        LoginPage.Login_Page()
+        def NewWindow():
+            window = Tk()
+            window.title("Bill")
+            window.geometry('915x490')
+            bill_text_area = Text(window, font=("arial", 12))
+            yt = "\t\t\t\tCyber Cafe Management System\n\t\t\t\tHarshad Mehta, Malad-400064\n"
+            yt += "\t\t\t\tGST.NO:- 123456789\n"
+            yt += "-" * 61 + "BILL" + "-" * 61 + "\nDate:- "
+
+            # Date and time
+            t = time.localtime(time.time())
+            week_day_dict = {0: "Monday", 1: "Tuesday", 2: "Wednesday", 3: "Thursday", 4: "Friday", 5: "Saturday",
+                             6: "Sunday"}
+            yt += f"{t.tm_mday} / {t.tm_mon} / {t.tm_year} ({week_day_dict[t.tm_wday]})"
+            yt += " " * 10 + f"\t\t\t\t\t\tTime:- {t.tm_hour} : {t.tm_min} : {t.tm_sec}"
+
+            seconds = timeInSeconds % (24 * 3600)
+            hour = seconds // 3600
+            seconds %= 3600
+            minutes = seconds // 60
+            seconds %= 60
+            timeDisplayed = "%d:%02d:%02d" % (hour, minutes, seconds)
+            yt += f"\nCustomer Name:- {user_data[1]}\nCustomer Contact:- {user_data[3]} \n"
+            yt += "-" * 130 + "\n" + " " * 4 + "PARTICULARS\t\t\tTIME\t\tRATE\t\tAMOUNT\n"
+            yt += "\n" + " " * 4 + f"PC Usage\t\t\t{timeDisplayed} \t\t100/hr\t\t{totalAmount}\n"
+            yt += "-" * 130 + "\n"
+            newlabel = Label(window, text="Settings Window")
+            newlabel.pack()
+            yt += f"\n\t\t\tTotal price :{totalAmount}\n"  # totalPrice
+            bill_text_area.insert(1.0, yt)
+            bill_text_area.pack(expand=True, fill=BOTH)
+            window.focus_set()
+            window.protocol("WM_DELETE_WINDOW")
+            window.mainloop()
+
+        NewWindow()
+        # LoginPage.Login_Page()
         return
 
     logout_btn = Button(
@@ -76,31 +156,12 @@ def Customer_Page(uid):
         cursor='hand2',
         command=logout
     )
-    logout_btn.grid(row=1, columnspan=2)
+    logout_btn.place(x=75, y=190)
+
+    label = Label(ws, width=15, bg='#116562', fg='red', font=('Times', 20))
+    label.place(x=70, y=190)
+    label.grid(row=0, column=0, sticky=W, padx=40, pady=120)
+    running = True
+    counter_label(label)
+
     ws.mainloop()
-    #
-    # Label(
-    #     left_frame,
-    #     text="Enter Email",
-    #     bg='#CCCCCC',
-    #     font=f).grid(row=1, column=0, pady=10)
-    #
-    # Label(
-    #     left_frame,
-    #     text="Enter Password",
-    #     bg='#CCCCCC',
-    #     font=f
-    # ).grid(row=2, column=0, pady=10)
-    #
-    # email_tf = Entry(
-    #     left_frame,
-    #     font=f
-    # )
-    # pwd_tf = Entry(
-    #     left_frame,
-    #     font=f,
-    #     show='*'
-    #
-
-
-# Customer_Page('fa04be85-1077-4d99-aac1-28f18d205098')
