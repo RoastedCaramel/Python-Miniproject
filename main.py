@@ -1,4 +1,4 @@
-from app import LoginPage
+import LoginPage
 
 if __name__ == "__main__":
     LoginPage.Login_Page()

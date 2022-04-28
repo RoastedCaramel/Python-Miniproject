@@ -1,7 +1,7 @@
 import uuid
 import random
 import pymysql
-from app import Constants
+import Constants
 
 
 def customerTable():

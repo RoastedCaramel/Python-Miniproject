@@ -3,10 +3,7 @@ from tkinter import ttk, messagebox
 import datetime
 import pymysql
 
-from app import Constants
-
-
-# from app.ManageComputer import manage_computer
+import Constants
 
 
 def fetch_daily_earning_data():
@@ -36,7 +33,6 @@ def daily_monthly_earnings(currentlyLoggedInAdmin, typeOfReq):
     ws.title('Daily Earnings')
     ws.geometry('550x330')
     ws.config(padx=10, pady=10)
-    # f = ('Times', 14)
     menuFont = ('Times', 12)
 
     # Menu Bar
@@ -46,19 +42,25 @@ def daily_monthly_earnings(currentlyLoggedInAdmin, typeOfReq):
     def adminLogout():
         ws.destroy()
         messagebox.showinfo('Successfully Logged out', 'You have logged out as administrator!')
-        from app.LoginPage import Login_Page
+        from LoginPage import Login_Page
         Login_Page()
+
+    def mainPage():
+        ws.destroy()
+        from MainAdminPage import Main_Admin_Page
+        Main_Admin_Page(currentlyLoggedInAdmin)
 
     adminMenu = Menu(menuBar, tearoff=0)
     adminMenu.add_command(label=f"Logged in as {currentlyLoggedInAdmin}", font=('Times', 11, 'bold'), command=NONE)
     adminMenu.add_separator()
+    adminMenu.add_command(label="Main Page", font=('Times', 11), command=mainPage)
     adminMenu.add_command(label="logout", font=('Times', 11), command=adminLogout)
     menuBar.add_cascade(label="Admin", menu=adminMenu)
 
     #   Menu 2: Computer menu
     def manage_computers():
         ws.destroy()
-        from app.ManageComputer import manage_computer
+        from ManageComputer import manage_computer
         manage_computer(currentlyLoggedInAdmin)
 
     computerMenu = Menu(menuBar, tearoff=0)
@@ -67,7 +69,7 @@ def daily_monthly_earnings(currentlyLoggedInAdmin, typeOfReq):
 
     #   Menu 3: Registered Users Menu
     def manage_regestered_users():
-        from app.DisplayCustomers import display_customers
+        from DisplayCustomers import display_customers
         ws.destroy()
         display_customers(currentlyLoggedInAdmin)
 
@@ -124,8 +126,6 @@ def daily_monthly_earnings(currentlyLoggedInAdmin, typeOfReq):
     trv.heading('3', text='Amount Earned')
     trv.heading('4', text='Computer ID')
     trv.heading('5', text='User Id')
-    # my_scrollbar = ttk.Scrollbar(, orient=VERTICAL, command=trv.yview)
-    # my_scrollbar.pack(side=RIGHT, fill=Y)
     if typeOfReq == 0:
         earningData = fetch_daily_earning_data()
     elif typeOfReq == 1:
@@ -137,6 +137,3 @@ def daily_monthly_earnings(currentlyLoggedInAdmin, typeOfReq):
         amountEarned += i[4]
     Label(main_frame, text=f"Amount Earned  =  ₹{amountEarned}", font=('Sans', 20)).pack(side='bottom')
     ws.mainloop()
-
-
-# daily_monthly_earnings('adam', 1)
