@@ -3,9 +3,10 @@ from tkinter import ttk, messagebox
 import datetime
 import pymysql
 
-import LoginPage
-from app import DisplayCustomers, Constants
-from app.ManageComputer import manage_computer
+from app import Constants
+
+
+# from app.ManageComputer import manage_computer
 
 
 def fetch_daily_earning_data():
@@ -44,8 +45,9 @@ def daily_monthly_earnings(currentlyLoggedInAdmin, typeOfReq):
     #   Menu 1: Admin menu
     def adminLogout():
         ws.destroy()
-        messagebox.showinfo('Login Status', 'You have logged out as administrator!')
-        LoginPage.Login_Page()
+        messagebox.showinfo('Successfully Logged out', 'You have logged out as administrator!')
+        from app.LoginPage import Login_Page
+        Login_Page()
 
     adminMenu = Menu(menuBar, tearoff=0)
     adminMenu.add_command(label=f"Logged in as {currentlyLoggedInAdmin}", font=('Times', 11, 'bold'), command=NONE)
@@ -56,6 +58,7 @@ def daily_monthly_earnings(currentlyLoggedInAdmin, typeOfReq):
     #   Menu 2: Computer menu
     def manage_computers():
         ws.destroy()
+        from app.ManageComputer import manage_computer
         manage_computer(currentlyLoggedInAdmin)
 
     computerMenu = Menu(menuBar, tearoff=0)
@@ -64,8 +67,9 @@ def daily_monthly_earnings(currentlyLoggedInAdmin, typeOfReq):
 
     #   Menu 3: Registered Users Menu
     def manage_regestered_users():
+        from app.DisplayCustomers import display_customers
         ws.destroy()
-        DisplayCustomers.display_customers(currentlyLoggedInAdmin)
+        display_customers(currentlyLoggedInAdmin)
 
     registeredUsersMenu = Menu(menuBar, tearoff=0)
     registeredUsersMenu.add_command(label='Manage Customers', command=manage_regestered_users)
@@ -135,4 +139,4 @@ def daily_monthly_earnings(currentlyLoggedInAdmin, typeOfReq):
     ws.mainloop()
 
 
-daily_monthly_earnings('adam', 1)
+# daily_monthly_earnings('adam', 1)

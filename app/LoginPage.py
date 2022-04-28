@@ -4,13 +4,8 @@ import Constants
 
 import pymysql
 
-import CustomerPage
-import MainAdminPage
-# importing all different pages used
-import RegisterationPage
 
-
-def login_response(email_tf, pwd_tf, ws):
+def login_response(email_tf, pwd_tf, ws, cmp_tf):
     warn, userEmail, pwd, uid, userData, adminData, adminPassword, adminEmail, adminName, adminID \
         = '', [], [], [], [], [], [], [], [], []
     try:
@@ -43,6 +38,7 @@ def login_response(email_tf, pwd_tf, ws):
         messagebox.showerror(f"Error: {ep}")
     enteredEmail = email_tf.get()
     enteredPassword = pwd_tf.get()
+    enteredComputer = cmp_tf.get()
     check_counter = 0
     if enteredEmail == "":
         warn = "Username can't be empty"
@@ -59,9 +55,8 @@ def login_response(email_tf, pwd_tf, ws):
                 ws.destroy()
                 messagebox.showinfo('Login Status', 'Logged in Successfully!')
                 # TODO Send the customer_uid[i] to the next page when login successful for customer and display the page
-                # now = datetime.now()
-                # current_time = now.strftime("%H:%M:%S")
-                CustomerPage.Customer_Page(uid[i])
+                from app.CustomerPage import Customer_Page
+                Customer_Page(uid[i], enteredComputer)
 
         for i in range(0, len(adminData)):
             if enteredEmail == adminEmail[i] and enteredPassword == adminPassword[i]:
@@ -70,7 +65,8 @@ def login_response(email_tf, pwd_tf, ws):
                 messagebox.showinfo('Login Status', 'Logged in Successfully as Admin!')
                 # TODO Send the admin_uid[i] to the next page when login successful for admin and display the page
                 ws.destroy()
-                MainAdminPage.Main_Admin_Page(loggedInAdminName)
+                from app.MainAdminPage import Main_Admin_Page
+                Main_Admin_Page(loggedInAdminName)
                 break
         else:
             messagebox.showerror('Login Status', 'invalid userEmail or password')
@@ -111,6 +107,12 @@ def Login_Page():
         bg='#CCCCCC',
         font=f
     ).grid(row=2, column=0, pady=10)
+    Label(
+        left_frame,
+        text="Enter Computer No.",
+        bg='#CCCCCC',
+        font=f
+    ).grid(row=3, column=0, pady=10)
 
     email_tf = Entry(
         left_frame,
@@ -121,13 +123,19 @@ def Login_Page():
         font=f,
         show='*'
     )
+    cmp_tf = Entry(
+        left_frame,
+        font=f,
+        show='*'
+    )
 
     def login():
-        login_response(email_tf, pwd_tf, ws)
+        login_response(email_tf, pwd_tf, ws, cmp_tf)
 
     def reg():
         ws.destroy()
-        RegisterationPage.Registeration_Page()
+        from app.RegisterationPage import Registeration_Page
+        Registeration_Page()
 
     register_btn = Button(
         left_frame,
@@ -150,8 +158,9 @@ def Login_Page():
 
     email_tf.grid(row=1, column=1, pady=10, padx=20)
     pwd_tf.grid(row=2, column=1, pady=10, padx=20)
-    login_btn.grid(row=3, column=1, pady=10, padx=20)
-    register_btn.grid(row=3, column=0, pady=10, padx=20)
+    cmp_tf.grid(row=3, column=1, padx=20, pady=10)
+    login_btn.grid(row=4, column=1, pady=10, padx=20)
+    register_btn.grid(row=4, column=0, pady=10, padx=20)
     left_frame.pack()
 
     ws.mainloop()

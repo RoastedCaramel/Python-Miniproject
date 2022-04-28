@@ -1,24 +1,15 @@
 from tkinter import *
 from tkinter import ttk, messagebox
 
-from app import LoginPage, DisplayCustomers
 import pymysql
 import Constants
-import random
 import numpy as np
-
-
-# computer_id = random.seed(10)
-# print("computer_id=", computer_id)
-from app.DailyEarnings import daily_monthly_earnings
 
 
 def manage_computer(currentlyLoggedInAdmin):
     ws = Tk()
     ws.title('Manage Computer Terminals')
     ws.geometry('380x300')
-    # ws.config(bg='#0B5A81')
-    # f = ('Times', 14)
     menuFont = ('Times', 12)
 
     # Menu Bar
@@ -28,7 +19,8 @@ def manage_computer(currentlyLoggedInAdmin):
     def adminLogout():
         ws.destroy()
         messagebox.showinfo('Login Status', 'You have logged out as administrator!')
-        LoginPage.Login_Page()
+        from app.LoginPage import Login_Page
+        Login_Page()
 
     adminMenu = Menu(menuBar, tearoff=0)
     adminMenu.add_command(label=f"Logged in as {currentlyLoggedInAdmin}", font=('Times', 11, 'bold'), command=NONE)
@@ -36,25 +28,18 @@ def manage_computer(currentlyLoggedInAdmin):
     adminMenu.add_command(label="logout", font=('Times', 11), command=adminLogout)
     menuBar.add_cascade(label="Admin", menu=adminMenu)
 
-    #   Menu 2: Computer menu
-    # def manage_computers():
-    #     ws.destroy()
-    #     manage_computer(currentlyLoggedInAdmin)
-    #
-    # computerMenu = Menu(menuBar, tearoff=0)
-    # computerMenu.add_command(label="Manage Computer", command=manage_computers)
-    # menuBar.add_cascade(label='Computer', menu=computerMenu)
-
     #   Menu 3: Registered Users Menu
     def manage_regestered_users():
+        from app.DisplayCustomers import display_customers
         ws.destroy()
-        DisplayCustomers.display_customers(currentlyLoggedInAdmin)
+        display_customers(currentlyLoggedInAdmin)
 
     registeredUsersMenu = Menu(menuBar, tearoff=0)
     registeredUsersMenu.add_command(label='Manage Customers', command=manage_regestered_users)
     menuBar.add_cascade(label="Registered Customers", menu=registeredUsersMenu)
 
     #   Menu 4: Earnings Menu
+    from app.DailyEarnings import daily_monthly_earnings
     def manage_monthly_earnings():
         ws.destroy()
         daily_monthly_earnings(currentlyLoggedInAdmin, 1)
@@ -81,8 +66,6 @@ def manage_computer(currentlyLoggedInAdmin):
     main_frame.pack()
 
     Label(main_frame, text="Computer No.").grid(row=0, column=0, pady=10, padx=10)
-
-    # Label(main_frame, text="Availability").grid(row=0, column=1, pady=10, padx=10)
 
     def get_computer_details():
         con = pymysql.connect(host=Constants.HOST, user=Constants.USER, db=Constants.DATABASE)
@@ -136,14 +119,6 @@ def manage_computer(currentlyLoggedInAdmin):
             Button(main_frame, text='Remove', bd='5', command=lambda a=i: removepc(a)).grid(
                 row=displayComputerInfoRowNumber, column=1)
 
-        # btn = Button(main_frame, text='Remove', bd='5', command=lambda a=i: removepc(a)).grid(row=displayComputerInfoRowNumber, column=1)
-
-        # print("i=",i,"buttons=", buttons)
-        # btns = Button(main_frame, text='Remove', command=removepc).grid(row=displayComputerInfoRowNumber, column=1)
-        # btns.pack()
-        # btns.append(button)
-        # button = Button(main_frame, text='Remove', bd='5', command=removepc).grid(row=displayComputerInfoRowNumber, column=1)
-        # print("buttons=====", buttons)
         displayComputerInfoRowNumber += 1
     if get_computer_details() == ():
         Label(main_frame, text='None').grid(row=displayComputerInfoRowNumber, column=0)
@@ -152,6 +127,3 @@ def manage_computer(currentlyLoggedInAdmin):
     ttk.Separator(main_frame, orient='horizontal').grid(column=0, row=1, columnspan=4, sticky='ew')
 
     ws.mainloop()
-
-
-# manage_computer('Adam')

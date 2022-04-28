@@ -3,10 +3,8 @@ from tkinter import ttk, messagebox
 
 import pymysql
 
-import LoginPage
-from app import DisplayCustomers, Constants
-from app.DailyEarnings import daily_monthly_earnings
-from app.ManageComputer import manage_computer
+from app import Constants
+
 
 
 def get_computer_details():
@@ -36,8 +34,9 @@ def Main_Admin_Page(currentlyLoggedInAdmin):
     #   Menu 1: Admin menu
     def adminLogout():
         ws.destroy()
-        messagebox.showinfo('Login Status', 'You have logged out as administrator!')
-        LoginPage.Login_Page()
+        messagebox.showinfo('Successfully Logged out', 'You have logged out as administrator!')
+        from app.LoginPage import Login_Page
+        Login_Page()
 
     adminMenu = Menu(menuBar, tearoff=0)
     adminMenu.add_command(label=f"Logged in as {currentlyLoggedInAdmin}", font=('Times', 11, 'bold'), command=NONE)
@@ -48,6 +47,7 @@ def Main_Admin_Page(currentlyLoggedInAdmin):
     #   Menu 2: Computer menu
     def manage_computers():
         ws.destroy()
+        from app.ManageComputer import manage_computer
         manage_computer(currentlyLoggedInAdmin)
 
     computerMenu = Menu(menuBar, tearoff=0)
@@ -56,14 +56,17 @@ def Main_Admin_Page(currentlyLoggedInAdmin):
 
     #   Menu 3: Registered Users Menu
     def manage_regestered_users():
+        from app.DisplayCustomers import display_customers
         ws.destroy()
-        DisplayCustomers.display_customers(currentlyLoggedInAdmin)
+        display_customers(currentlyLoggedInAdmin)
 
     registeredUsersMenu = Menu(menuBar, tearoff=0)
     registeredUsersMenu.add_command(label='Manage Customers', command=manage_regestered_users)
     menuBar.add_cascade(label="Registered Customers", menu=registeredUsersMenu)
 
     #   Menu 4: Earnings Menu
+    from app.DailyEarnings import daily_monthly_earnings
+
     def manage_monthly_earnings():
         ws.destroy()
         daily_monthly_earnings(currentlyLoggedInAdmin, 1)
@@ -89,28 +92,12 @@ def Main_Admin_Page(currentlyLoggedInAdmin):
     )
     main_frame.pack(fill='x')
 
-    # Canvas to make scroll bar
-    # my_canvas = Canvas(main_frame)
-    # my_canvas.pack(side=LEFT, fill=BOTH)
-    # my_scrollbar = ttk.Scrollbar(main_frame, orient=VERTICAL, command=my_canvas.yview)
-    # my_scrollbar.pack(side=RIGHT, fill=Y)
-    # my_canvas.configure(yscrollcommand=my_scrollbar.set)
-    # my_canvas.bind('<Configure>',
-    #                lambda e:
-    #                my_canvas.configure(scrollregion=my_canvas.bbox("all")))
-    # second_frame = Frame(my_canvas)
-    # my_canvas.create_window((0, 0), window=second_frame, anchor='nw')
-
     Label(main_frame, text="Computer No.").grid(row=0, column=0, pady=10, padx=10)
     Label(main_frame, text="Availability").grid(row=0, column=1, pady=10, padx=10)
     Label(main_frame, text="User Id").grid(row=0, column=2, pady=10, padx=10)
     Label(main_frame, text="Start Time").grid(row=0, column=3, pady=10, padx=10)
     ttk.Separator(main_frame, orient='horizontal').grid(column=0, row=1, columnspan=4, sticky='ew')
-    # TODO Add vertical separators for each column
-    # ttk.Separator(main_frame, orient='vertical').grid(column=0, row=0, rows pan=2, sticky='ns')
 
-    # Button(main_frame, text="test").grid(row=2, column=0)
-    # computer id(int), in use(boolean), UserUsingStartTime(String),UserUsingID(String)
     # Fetch all computer data from database
     computer_data = get_computer_details()
 
@@ -138,5 +125,3 @@ def Main_Admin_Page(currentlyLoggedInAdmin):
         displayComputerInfoRowNumber += 1
 
     ws.mainloop()
-
-Main_Admin_Page('Adam')
