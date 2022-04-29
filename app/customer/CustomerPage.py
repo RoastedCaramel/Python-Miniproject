@@ -3,7 +3,7 @@ from tkinter import *
 import time
 from tkinter import messagebox
 
-import Constants
+from app.util import Constants
 import pymysql
 
 timeInSeconds = 0

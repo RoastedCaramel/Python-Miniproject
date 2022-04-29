@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter import messagebox
-import Constants
+from app.util import Constants
 
 import pymysql
 
@@ -70,7 +70,7 @@ def login_response(email_tf, pwd_tf, ws, cmp_tf):
                 messagebox.showinfo('Login Status', 'Logged in Successfully!')
                 # TODO Send the customer_uid[i] to the next page when login successful for customer and display the page
                 add_user_data_to_computer(uid[i], enteredComputer)
-                from CustomerPage import Customer_Page
+                from app.customer.CustomerPage import Customer_Page
                 Customer_Page(uid[i], enteredComputer)
 
         for i in range(0, len(adminData)):
@@ -80,7 +80,7 @@ def login_response(email_tf, pwd_tf, ws, cmp_tf):
                 messagebox.showinfo('Login Status', 'Logged in Successfully as Admin!')
                 # TODO Send the admin_uid[i] to the next page when login successful for admin and display the page
                 ws.destroy()
-                from MainAdminPage import Main_Admin_Page
+                from app.admin.MainAdminPage import Main_Admin_Page
                 Main_Admin_Page(loggedInAdminName)
                 break
         else:
@@ -148,7 +148,7 @@ def Login_Page():
 
     def reg():
         ws.destroy()
-        from RegisterationPage import Registeration_Page
+        from app.customer.RegisterationPage import Registeration_Page
         Registeration_Page()
 
     register_btn = Button(

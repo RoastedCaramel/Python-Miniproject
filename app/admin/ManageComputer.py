@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import ttk, messagebox
 
 import pymysql
-import Constants
+from app.util import Constants
 import numpy as np
 
 
