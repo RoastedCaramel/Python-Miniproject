@@ -141,7 +141,6 @@ def Login_Page():
     cmp_tf = Entry(
         left_frame,
         font=f,
-        show='*'
     )
 
     def login():
