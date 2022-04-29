@@ -4,7 +4,7 @@ from tkinter import messagebox
 
 import pymysql
 
-import Constants
+from app.util import Constants
 
 
 def validation(register_name, register_email, register_mobile, var, register_pwd, pwd_again):

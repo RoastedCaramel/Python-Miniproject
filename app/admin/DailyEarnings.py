@@ -3,7 +3,7 @@ from tkinter import ttk, messagebox
 import datetime
 import pymysql
 
-import Constants
+from app.util import Constants
 
 
 def fetch_daily_earning_data():

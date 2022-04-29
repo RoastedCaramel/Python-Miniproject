@@ -3,7 +3,7 @@ from tkinter import ttk, messagebox
 
 import pymysql
 
-import Constants
+from app.util import Constants
 
 
 def get_computer_details():
